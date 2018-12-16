@@ -14,20 +14,20 @@ module.exports = (app) => {
                 Date.now(),
             ]).then((reserv) => {
                 if (reserv.rows.length !== 0)
-                    return res.status(401).json({isUse: true, end: reserv.rows[0].end_reservation});
+                    return res.status(200).json({isUse: true, end: reserv.rows[0].end_reservation});
 
                 query(QUERY_RESERVATIONS.GET_FOR_PC_FUTURE, [
                     pc.rows[0].id,
                     Date.now(),
                 ]).then((reservF) => {
                     if (reservF.rows.length === 0)
-                        return res.status(401).json({isUse: false});
+                        return res.status(200).json({isUse: false});
 
                     let minStart = 9999999999999999999999;
                     for (let key in reservF.rows)
                         if (+reservF.rows[key].start_reservation < minStart) minStart = +reservF.rows[key].start_reservation;
 
-                    res.status(401).json({isUse: false, end: minStart});
+                    res.status(200).json({isUse: false, end: minStart});
                 });
             });
         });
